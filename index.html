@@ -44,6 +44,31 @@
         function startLesson(topic) {
             window.location.href = `learn.html?topic=${topic}`;
         }
+    // Tìm đến cuối phần script và chèn/kiểm tra đoạn này:
+document.getElementById('fileInput').onchange = function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const customData = JSON.parse(e.target.result);
+            
+            // Kiểm tra cấu trúc dữ liệu cơ bản
+            if (Array.isArray(customData) && customData.length > 0) {
+                questions = customData;
+localStorage.setItem('my_custom_questions', JSON.stringify(customData)); // Ghi đè bộ câu hỏi mặc định
+                alert(`Thành công! Đã tải lên ${customData.length} câu hỏi mới.`);
+                renderHome(); // Cập nhật lại giao diện trang chủ
+            } else {
+                alert("Lỗi: File JSON phải là một danh sách câu hỏi.");
+            }
+        } catch(err) {
+            alert("Lỗi: File không đúng định dạng JSON.");
+        }
+    };
+    reader.readAsText(file);
+};
     </script>
 </body>
 </html>
